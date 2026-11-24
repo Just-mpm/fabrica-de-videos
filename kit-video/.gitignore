@@ -1,0 +1,39 @@
+node_modules/
+compositions/
+.thumbnails/
+.waveform-cache/
+.ruff_cache/
+
+# saída gerada pelo build
+index.html
+
+# estado e artefatos do HyperFrames
+.hyperframes/
+
+# renders e trabalho bruto (não são acervo) — os .gitkeep mantêm as pastas
+renders/*
+!renders/.gitkeep
+!renders/demos/
+renders/demos/*
+!renders/demos/.gitkeep
+work/_*
+work/_*/
+work/prancha.*
+
+# saída padrão do palavras.py sem argumentos (o por-vídeo usa fala-<slug>.json)
+montagem/fala.json
+
+# originais guardados antes do recorte
+assets/desenhos/_originais/
+
+# mídia pesada: narração, trilha, poses e capturas são suas, não do repositório.
+# Quer versionar? Apague as linhas abaixo.
+assets/audio/*
+!assets/audio/.gitkeep
+assets/personagem/*
+!assets/personagem/.gitkeep
+assets/imagens/*
+!assets/imagens/.gitkeep
+
+# bytecode do Python (ferramentas às vezes importam umas às outras)
+__pycache__/

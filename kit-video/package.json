@@ -1,0 +1,13 @@
+{
+  "name": "kit-video",
+  "private": true,
+  "type": "module",
+  "description": "Kit de produção de vídeos narrados em HyperFrames (template)",
+  "scripts": {
+    "build": "node build/build.mjs",
+    "dev": "npx --yes hyperframes@0.9.46 preview",
+    "check": "npx --yes hyperframes@0.9.46 check",
+    "render": "npx --yes hyperframes@0.9.46 render",
+    "publish": "npx --yes hyperframes@0.9.46 publish"
+  }
+}

@@ -1,0 +1,13 @@
+# lixo de ferramentas
+.ruff_cache/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# vídeos renderizados (roteiro, thumbnails e youtube.md ficam versionados)
+videos/**/*.mp4
+
+# caminhos dos MCPs desta máquina (gerado por setup.ps1)
+mcp.local.json
+mcp.local.json.tmp

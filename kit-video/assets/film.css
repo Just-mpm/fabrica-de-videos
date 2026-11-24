@@ -1,0 +1,356 @@
+/* Sistema visual do filme (paleta padrão do kit — troque pela do seu canal)
+   Azul-noite, azul de apoio, ciano, verde-limão e gelo. Formas arredondadas,
+   volume suave e brilho ciano como assinatura.
+
+   Regra de cor: o fundo é azul-escuro sempre. Quem aponta é o ciano; quem
+   sustenta é o gelo. Azul estrutura as superfícies; verde-limão, amarelo e
+   vermelho entram só como acento de significado (positivo, alerta, faísca,
+   erro) — nunca como decoração. A paleta é fechada. */
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600 900;
+  font-display: block;
+  src: url("fonts/montserrat-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600 900;
+  font-display: block;
+  src: url("fonts/montserrat-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: block;
+  src: url("fonts/nunito-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: block;
+  src: url("fonts/nunito-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* JetBrains Mono não é fonte de marca: é ferramenta. Só entra onde o assunto é
+   código, terminal, atalho ou contador — para o olho ler "isto é técnico". */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: block;
+  src: url("fonts/jetbrains-mono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: block;
+  src: url("fonts/jetbrains-mono-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  /* ---------- COMO TROCAR A PALETA ----------
+     Mexa nas 5 cores de marca abaixo. Elas são a fonte de TUDO o que aparece:
+     film.css, as peças, as transições e o motor leem daqui. Não há cor
+     literal fora deste bloco — se trocar um token, o vídeo inteiro acompanha.
+     Depois confira os "derivados" logo em seguida (superfícies, tinta, linhas):
+     são aproximações de olho, não cálculos — se a sua paleta for muito
+     diferente, ajuste à mão olhando o resultado na tela.
+     `--shadow-rgb` é a cor da sombra (quase preta). Só mexa nela se o fundo
+     deixar de ser escuro.
+     O prompt de imagem em COMO-CRIAR.md cita os nomes dos tokens, não os
+     valores — só mexa nele se você renomear algum token.                  */
+
+  /* marca */
+  --navy: #0b1e4d;
+  --blue: #1565d8;
+  --cyan: #00d4ff;
+  --lime: #a8f05a;
+  --ice: #f2f8ff;
+
+  /* derivados das cores de marca: superfícies (do mais fundo ao mais claro) */
+  --bg: var(--navy);
+  --bg-2: #08163a;
+  --panel: #122e69;
+  --panel-2: #1b4fa8;
+
+  /* derivados das cores de marca: texto */
+  --ink: var(--ice);
+  --ink-soft: #c3d8f2;
+  --ink-dim: #9eb8de;
+  --on-accent: #06214a;
+
+  /* acentos de significado */
+  --cyan-d: #00a6cc;
+  --blue-l: #7c9cff;
+  --green: #a8f05a;
+  --violet: #7c9cff;
+  --amber: #ffd23f;
+  --red: #ff5c6c;
+
+  /* triplas para rgba() — a única forma de ter alfa dentro de uma cor de token */
+  --bg-rgb: 11, 30, 77;
+  --bg-2-rgb: 8, 22, 58;
+  --panel-rgb: 18, 46, 105;
+  --panel-2-rgb: 27, 79, 168;
+  --ink-rgb: 242, 248, 255;
+  --ink-soft-rgb: 195, 216, 242;
+  --ink-dim-rgb: 158, 184, 222;
+  --cyan-rgb: 0, 212, 255;
+  --blue-rgb: 21, 101, 216;
+  --blue-l-rgb: 124, 156, 255;
+  --lime-rgb: 168, 240, 90;
+  --amber-rgb: 255, 210, 63;
+  --red-rgb: 255, 92, 108;
+  --line-rgb: 130, 190, 255;
+  --shadow-rgb: 4, 14, 40;
+
+  /* linhas */
+  --line: rgba(var(--line-rgb), 0.22);
+  --line-2: rgba(var(--line-rgb), 0.42);
+
+  --display: "Montserrat", "Nunito", sans-serif;
+  --body: "Nunito", "Montserrat", sans-serif;
+  --mono: "JetBrains Mono", "Nunito", monospace;
+
+  /* forma: o canto arredondado é assinatura, não detalhe */
+  --r-sm: 14px;
+  --r-md: 22px;
+  --r-lg: 28px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; }
+
+/* profundidade: o fundo é azul-escuro, sobe um azul no alto e escurece as bordas.
+   Fica atrás do conteúdo (z-index 0): é decoração de fundo, não um véu.
+   Com z-index alto ele cobre a tag e o HUD — e o check marca o texto como oculto. */
+.vig {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(120% 80% at 50% 8%, rgba(var(--blue-rgb), 0.30) 0%, rgba(var(--blue-rgb), 0) 62%),
+    radial-gradient(120% 90% at 50% 96%, rgba(var(--shadow-rgb), 0.55) 0%, rgba(var(--shadow-rgb), 0) 62%);
+}
+
+/* ---------- tipografia ---------- */
+.t-display {
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+}
+.t-body {
+  font-family: var(--body);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+.t-lead {
+  font-family: var(--body);
+  font-weight: 700;
+  line-height: 1.32;
+  letter-spacing: 0;
+}
+.t-mono {
+  font-family: var(--mono);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+.tag {
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+.small {
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: 0;
+  color: var(--ink-soft);
+}
+/* O brilho é assinatura do canal, mas continua sendo acento: dois halos curtos.
+   Em título gigante, halo largo vira mancha — por isso o raio é pequeno. */
+.glow { text-shadow: 0 0 16px rgba(var(--cyan-rgb), 0.38), 0 0 40px rgba(var(--cyan-rgb), 0.16); }
+.glow-soft { text-shadow: 0 0 12px rgba(var(--cyan-rgb), 0.22); }
+
+.hl-cyan { color: var(--cyan); }
+.hl-blue { color: var(--blue-l); }
+.hl-violet { color: var(--violet); }
+.hl-green { color: var(--lime); }
+.hl-lime { color: var(--lime); }
+.hl-amber { color: var(--amber); }
+.hl-red { color: var(--red); }
+.dim { color: var(--ink-soft); }
+
+/* palavra riscada por um traço (o runtime anima o path) */
+.risco { position: relative; display: inline-block; }
+.risco svg { position: absolute; left: -2%; bottom: 18%; width: 104%; height: 42%; overflow: visible; }
+
+/* sublinhado de marca: a barra ciana cheia, como no logo (data-anim="marca") */
+.marca {
+  background-image: linear-gradient(transparent 74%, rgba(var(--cyan-rgb), 0.55) 74%, rgba(var(--cyan-rgb), 0.55) 97%, transparent 97%);
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 100% 100%;
+  padding: 0 0.06em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* ---------- superfícies ---------- */
+/* cartão comum: azul sólido, canto grande, borda ciana discreta */
+.glass {
+  background:
+    linear-gradient(160deg, rgba(var(--panel-2-rgb), 0.92) 0%, rgba(var(--panel-rgb), 0.96) 58%, rgba(var(--panel-rgb), 1) 100%);
+  border: 1.5px solid rgba(var(--line-rgb), 0.34);
+  border-radius: var(--r-md);
+  box-shadow:
+    inset 0 1.5px 0 rgba(var(--ink-rgb), 0.14),
+    0 22px 48px rgba(var(--shadow-rgb), 0.5);
+}
+/* painel escuro: buraco na cena, para conteúdo que já tem cor própria */
+.glass-soft {
+  background: rgba(var(--bg-2-rgb), 0.78);
+  border: 1.5px solid rgba(var(--line-rgb), 0.2);
+  border-radius: var(--r-md);
+}
+/* cartão de destaque: é o ciano que manda; borda grossa e halo */
+.glass-cyan {
+  background: linear-gradient(160deg, rgba(var(--panel-2-rgb), 0.96) 0%, rgba(var(--panel-rgb), 1) 100%);
+  border: 2px solid rgba(var(--cyan-rgb), 0.62);
+  border-radius: var(--r-lg);
+  box-shadow:
+    inset 0 1.5px 0 rgba(var(--ink-rgb), 0.2),
+    0 0 44px rgba(var(--cyan-rgb), 0.18),
+    0 24px 54px rgba(var(--shadow-rgb), 0.5);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 999px;
+  padding: 12px 26px;
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  border: 1.5px solid var(--line-2);
+  background: rgba(var(--panel-2-rgb), 0.75);
+  color: var(--ink);
+}
+.chip.cyan { background: rgba(var(--cyan-rgb), 0.16); border-color: rgba(var(--cyan-rgb), 0.6); color: var(--cyan); }
+.chip.solid { background: var(--cyan); border-color: var(--cyan); color: var(--on-accent); }
+.chip.dashed { background: transparent; border-style: dashed; color: var(--ink-soft); }
+.chip.violet { background: rgba(var(--blue-l-rgb), 0.18); border-color: rgba(var(--blue-l-rgb), 0.6); color: var(--blue-l); }
+.chip.amber { background: rgba(var(--amber-rgb), 0.16); border-color: rgba(var(--amber-rgb), 0.55); color: var(--amber); }
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 12px rgba(var(--cyan-rgb), 0.9);
+  flex: 0 0 auto;
+}
+
+.rule { height: 2px; background: linear-gradient(90deg, var(--line-2), transparent); transform-origin: left center; }
+.rule-cyan { height: 3px; border-radius: 999px; background: linear-gradient(90deg, var(--cyan), rgba(var(--cyan-rgb), 0)); transform-origin: left center; }
+
+/* moldura de cena: retângulo arredondado que separa o quadro do fundo */
+.moldura {
+  position: absolute;
+  inset: 26px;
+  border: 2px solid rgba(var(--line-rgb), 0.2);
+  border-radius: var(--r-lg);
+  pointer-events: none;
+}
+
+/* ---------- fundos ---------- */
+.dotgrid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(var(--cyan-rgb), 0.34) 1.6px, transparent 1.6px);
+  background-size: 34px 34px;
+}
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(180deg, rgba(var(--ink-rgb), 0.05) 0px, rgba(var(--ink-rgb), 0.05) 1px, transparent 1px, transparent 4px);
+  pointer-events: none;
+}
+.glow-cyan {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--cyan-rgb), 0.34) 0%, rgba(var(--cyan-rgb), 0.09) 42%, transparent 68%);
+  filter: blur(4px);
+  pointer-events: none;
+}
+.glow-blue {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--blue-rgb), 0.5) 0%, rgba(var(--blue-rgb), 0.12) 45%, transparent 70%);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* cantos de HUD: quatro marcas curtas, geradas pela peça */
+.hud-corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-color: rgba(var(--cyan-rgb), 0.85);
+  border-style: solid;
+  border-width: 0;
+}
+.hud-corner.tl { left: -1px; top: -1px; border-left-width: 3px; border-top-width: 3px; border-top-left-radius: 10px; }
+.hud-corner.tr { right: -1px; top: -1px; border-right-width: 3px; border-top-width: 3px; border-top-right-radius: 10px; }
+.hud-corner.bl { left: -1px; bottom: -1px; border-left-width: 3px; border-bottom-width: 3px; border-bottom-left-radius: 10px; }
+.hud-corner.br { right: -1px; bottom: -1px; border-right-width: 3px; border-bottom-width: 3px; border-bottom-right-radius: 10px; }
+
+/* ---------- blocos animáveis ---------- */
+.wd, .ch { display: inline-block; }
+.fig { position: absolute; }
+.fig img { display: block; height: 100%; width: auto; }
+/* o personagem é recorte: a sombra o apoia no fundo em vez de deixá-lo flutuando */
+.fig img { filter: drop-shadow(0 14px 26px rgba(var(--shadow-rgb), 0.45)); }
+
+/* cursor do mouse: a seta é desenhada, o clique é um anel */
+.cursor-arrow { filter: drop-shadow(0 4px 10px rgba(var(--shadow-rgb), 0.55)); }
+.cursor-ring { border: 3px solid var(--cyan); border-radius: 50%; }
+
+/* barra de progresso de capítulo (overlay) */
+.prog-track { background: rgba(var(--line-rgb), 0.2); border-radius: 999px; }
+.prog-fill { background: linear-gradient(90deg, var(--cyan), var(--blue-l)); border-radius: 999px; box-shadow: 0 0 16px rgba(var(--cyan-rgb), 0.55); }
+
+/* teclas (atalhos, "enter", "ctrl") */
+.kbd {
+  font-family: var(--mono);
+  font-size: 22px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--line-2);
+  background: rgba(var(--panel-rgb), 0.95);
+  color: var(--ink-soft);
+  box-shadow: 0 3px 0 rgba(var(--shadow-rgb), 0.55);
+}

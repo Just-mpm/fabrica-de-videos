@@ -1,0 +1,12 @@
+# Normaliza fim de linha no índice e evita "todos os arquivos modificados"
+# quando o repositório é aberto em máquinas diferentes (Windows x Linux/macOS).
+* text=auto
+
+# mídia: nunca tratar como texto
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.wav binary
+*.mp3 binary
+*.mp4 binary
+*.woff2 binary

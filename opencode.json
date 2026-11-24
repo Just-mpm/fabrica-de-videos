@@ -1,0 +1,27 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "frame",
+  "mcp": {
+    "servers": {
+      "youtube": {
+        "type": "local",
+        "command": ["node", ".opencode/mcp/run.mjs", "youtube"],
+        "environment": {
+          "YOUTUBE_MCP_ACCOUNT": "principal"
+        }
+      },
+      "youtube-studio": {
+        "type": "local",
+        "command": ["node", ".opencode/mcp/run.mjs", "youtube-studio"]
+      },
+      "images-audio": {
+        "type": "local",
+        "command": ["node", ".opencode/mcp/run.mjs", "images-audio"]
+      },
+      "google-trends": {
+        "type": "local",
+        "command": ["node", ".opencode/mcp/run.mjs", "google-trends"]
+      }
+    }
+  }
+}
