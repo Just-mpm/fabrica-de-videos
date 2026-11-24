@@ -152,13 +152,12 @@ if (-not $SkipLogin) {
     Write-Host "  node .opencode/mcp/run.mjs images-audio --login"
     Write-Host "  node .opencode/mcp/run.mjs youtube-studio --login"
     Write-Host "  node .opencode/mcp/run.mjs google-trends --consent"
-    Write-Host "  node .opencode/mcp/run.mjs youtube auth --account principal"
     Write-Host ""
     Write-Host "Depois disso, abra o OpenCode nesta pasta: os MCPs ja estao em opencode.json."
 }
 
-# 6. Resumo (a ausencia de um servidor nao e erro do script: pode ser o pacote
-# privado ou um repositorio que nao existe nesta maquina)
+# 6. Resumo (a ausencia de um servidor nao e erro do script: pode ser um
+# repositorio que nao existe nesta maquina)
 Write-Host ""
 if ($semServidor.Count -gt 0) {
     Write-Host ("Sem servidor nesta maquina: {0}." -f ($semServidor -join ", ")) -ForegroundColor Yellow

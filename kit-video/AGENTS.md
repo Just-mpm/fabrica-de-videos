@@ -165,7 +165,7 @@ Regras:
 - `pecas` é obrigatório e não pode ser vazio.
 - Cada peça precisa de `tipo`; o build falha com a lista de tipos válidos.
 - Peça de texto solta precisa de `x`/`y`; dentro de `grupo`, `linha` ou `cartao`, flui.
-- Título que ocupa duas linhas se escreve com `\n` (`"ninguém\nprecisou"`) — sem isso o navegador escolhe a quebra e a altura do bloco vira imprevisível.
+- Título que ocupa duas linhas se escreve com `linhas: ["ninguém", "precisou"]` (um item por linha); `\n` dentro de `texto` é erro e o build falha.
 - `at: null` desliga a animação da peça (útil para conteúdo que anima junto com o cartão).
 - `moldura: true` desenha os cantos de HUD no quadro da cena.
 - Não existe limite de cenas; o limite é editorial.

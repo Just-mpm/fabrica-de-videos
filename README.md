@@ -80,13 +80,12 @@ Se o `check` terminar com `0 error(s)`, seu kit está de pé. Para ver como cada
 
 ## Os MCPs
 
-Quatro servidores MCP dão as ferramentas externas aos agentes. O `opencode.json` não guarda caminho de máquina: ele chama `.opencode/mcp/run.mjs`, que acha o programa certo nesta máquina (pasta local → `node_modules` → `npx`).
+Três servidores MCP dão as ferramentas externas aos agentes. O `opencode.json` não guarda caminho de máquina: ele chama `.opencode/mcp/run.mjs`, que acha o programa certo nesta máquina (pasta local → `node_modules` → `npx`).
 
 | Nome no OpenCode | Para que serve | Primeiro uso |
 |---|---|---|
 | `images-audio` | narração (TTS), imagens/desenhos e transcrição por palavra | `--login` |
 | `youtube-studio` | lê o Studio (destaques do nicho, ideias, "Pergunte ao Studio") | `--login` |
-| `youtube` | lê o seu canal (métricas, retenção, comentários) e publica vídeo | `auth --setup`, depois `auth --account` |
 | `google-trends` | interesse, regiões e termos em alta para escolher assunto | `--consent` |
 
 ### 1. Preparar (uma vez por máquina)
@@ -108,7 +107,7 @@ Se o repositório estiver em outro lugar:
 powershell -File setup.ps1 -McpRepo "E:\caminho\mcps-ai"
 ```
 
-Sem a pasta local, o launcher baixa `images-audio`, `youtube-studio` e `google-trends` do npm com `npx -y` — os três já estão publicados. O `youtube` não é público: para ele, peça o repositório de pacotes a quem te entregou o template e rode o setup com `-McpRepo` apontando para a pasta.
+Sem a pasta local, o launcher baixa `images-audio`, `youtube-studio` e `google-trends` do npm com `npx -y` — os três já estão publicados.
 
 ### 2. Login de cada MCP (uma vez por máquina)
 
@@ -116,13 +115,11 @@ Sem a pasta local, o launcher baixa `images-audio`, `youtube-studio` e `google-t
 node .opencode/mcp/run.mjs images-audio --login
 node .opencode/mcp/run.mjs youtube-studio --login
 node .opencode/mcp/run.mjs google-trends --consent
-node .opencode/mcp/run.mjs youtube auth --setup
-node .opencode/mcp/run.mjs youtube auth --account principal
 ```
 
-Os comandos de login abrem uma janela do Chrome; faça login e espere a confirmação — ele fecha a janela que ele mesmo abriu (o `youtube auth --setup` é só uma pergunta no terminal). O perfil fica na pasta do usuário (`~/.chatgpt-images`, `~/.ai-studio-images`, `~/.youtube-studio-mcp`, `~/.youtube-mcp`) e **não** viaja quando você copia o template: por isso o login é por máquina.
+Os comandos de login abrem uma janela do Chrome; faça login e espere a confirmação — ele fecha a janela que ele mesmo abriu. O perfil fica na pasta do usuário (`~/.chatgpt-images`, `~/.ai-studio-images`, `~/.youtube-studio-mcp`) e **não** viaja quando você copia o template: por isso o login é por máquina.
 
-O `images-audio --login` faz os dois provedores (ChatGPT e AI Studio); `--login --provider chatgpt` (ou `aistudio`) limita a um. O `youtube` é o único que precisa de credenciais do Google Cloud — o `auth --setup` pergunta uma vez.
+O `images-audio --login` faz os dois provedores (ChatGPT e AI Studio); `--login --provider chatgpt` (ou `aistudio`) limita a um.
 
 ### 3. Conferir
 
@@ -136,7 +133,6 @@ A resposta diz `local` (pasta do repositório), `installed` (`node_modules`) ou 
 
 | Sintoma | Causa provável | O que fazer |
 |---|---|---|
-| `não encontrado nesta máquina` | O setup não achou o pacote — ou é o `youtube`, que não é público | Rode o setup com `-McpRepo` apontando para o repositório |
 | Conecta, mas a primeira tool falha | Falta login no perfil daquele MCP | Rode o comando de login da tabela |
 | `Node ... exige 20` | Node antigo no PATH | Instale o Node 20 ou superior (o template usa 24) |
 | `mcp.local.json inválido` | O arquivo foi editado à mão e ficou com BOM ou vírgula sobrando | Rode o setup de novo apontando para os pacotes; ele reescreve |

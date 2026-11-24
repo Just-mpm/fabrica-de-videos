@@ -8,7 +8,7 @@
  *   1. pasta do repositório de pacotes (`mcp.local.json`, gerado pelo setup.ps1
  *      nesta máquina — fora do Git);
  *   2. `node_modules` do próprio template (quem preferir instalar por projeto);
- *   3. npm público, via `npx -y` (depois de publicado).
+ *   3. npm público, via `npx -y` (os três pacotes já estão publicados).
  *
  * Sem isso, o config teria caminho absoluto de uma máquina só, ou dependeria de
  * um comando global (`npm link`) que quem clona nunca tem.
@@ -25,12 +25,11 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(here, "..", "..");
 
-/** nome no opencode.json → pacote npm e se ele é público. */
+/** nome no opencode.json → pacote npm, instalado na primeira execução via npx. */
 const SERVERS = {
-  "images-audio": { pkg: "@justmpm/images-audio", public: true },
-  "youtube-studio": { pkg: "@justmpm/youtube-studio", public: true },
-  "google-trends": { pkg: "@justmpm/google-trends", public: true },
-  youtube: { pkg: "@justmpm/youtube", public: false },
+  "images-audio": { pkg: "@justmpm/images-audio" },
+  "youtube-studio": { pkg: "@justmpm/youtube-studio" },
+  "google-trends": { pkg: "@justmpm/google-trends" },
 };
 
 const args = process.argv.slice(2);
@@ -97,34 +96,18 @@ function resolvePlan() {
   const installedEntry = entryOf(installed);
   if (installedEntry !== null) return { kind: "installed", entry: installedEntry, dir: installed };
 
-  if (server.public) return { kind: "npx" };
-  return { kind: "missing" };
+  return { kind: "npx" };
 }
 
 const plan = resolvePlan();
 
 if (checking) {
-  if (plan.kind === "missing") {
-    process.stderr.write(
-      `[mcp] ${name}: não encontrado. Rode setup.ps1 (o pacote ${server.pkg} não é público).\n`,
-    );
-    process.exit(1);
-  }
   const where =
     plan.kind === "npx"
       ? `npx -y ${server.pkg} (baixa na primeira execucao; so funciona se estiver publicado no npm)`
       : `${packageVersion(plan.dir)} ${plan.entry}`;
   process.stdout.write(`${name} (${plan.kind}): ${where}\n`);
   process.exit(0);
-}
-
-if (plan.kind === "missing") {
-  process.stderr.write(
-    `[mcp] ${name}: não encontrado nesta máquina.\n` +
-      `  Rode o setup.ps1 na raiz do projeto (ou defina MCP_REPO para o\n` +
-      `  repositório de pacotes). O pacote ${server.pkg} não é público, então npx não serve.\n`,
-  );
-  process.exit(1);
 }
 
 /** `spawn` de `.cmd` no Windows exige shell; no Linux/macOS o npx é executável direto. */

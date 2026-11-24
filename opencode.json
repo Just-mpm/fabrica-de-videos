@@ -3,13 +3,6 @@
   "default_agent": "frame",
   "mcp": {
     "servers": {
-      "youtube": {
-        "type": "local",
-        "command": ["node", ".opencode/mcp/run.mjs", "youtube"],
-        "environment": {
-          "YOUTUBE_MCP_ACCOUNT": "principal"
-        }
-      },
       "youtube-studio": {
         "type": "local",
         "command": ["node", ".opencode/mcp/run.mjs", "youtube-studio"]
