@@ -5,34 +5,68 @@
    fazer agora (o botão de inscrever) — e todas as três entram em ordem de
    importância, não de uma vez.
 
-   O slot é um retângulo 16:9 de verdade (860×484), do tamanho e no lugar onde
-   o elemento de vídeo do YouTube encaixa. O que está dentro dele é desenho,
-   não promessa: barras, um anel e um botão de play. */
+   O slot é um retângulo 16:9 de verdade (940×529 de vídeo), com o cabeçalho
+   por fora da área de vídeo — assim uma thumbnail real entra sem letterbox. O
+   que está dentro dele é desenho, não promessa: barras, um anel e um play. */
 
 import { envolver } from "./base.mjs";
+import { prosa } from "../prosa.mjs";
+
+/* Piso de tempo de tela do cartão. O build (build/compilar.mjs) usa este número
+   para esticar a última cena quando a narração termina colada no corte — sem
+   isso o cartão herdava só a cauda do áudio (~1,6 s). */
+export const MIN_JANELA = 10;
 
 export const contrato = {
   nome: "fim",
   funcao: "cartão final: avatar do canal, nome, slot 16:9 do próximo vídeo e botão de inscrever",
-  usa: "titulo, sub, avatar, promessa, rec {rotulo, nota}, inscrever, t {avatar, nome, sub, promessa, slot, play, botao, onda1, onda2}, x, y, at, anim",
+  usa: "titulo, sub, avatar, promessa, rec {rotulo, nota}, inscrever, janela, t {avatar, nome, sub, promessa, slot, play, botao, onda1, onda2, onda3, pulso1, pulso2}, x, y, at, anim",
   naoFaz: "mais de um slot de recomendação; texto corrido; concorrer com a última frase da narração",
 };
 
 const num = (v) => (typeof v === "number" && Number.isFinite(v) ? v : null);
 const at = (q, extra = 0) => (q == null ? "" : `data-at="${(q + extra).toFixed(2)}"`);
 
+/* Duas linhas do nome: o corte é o que deixa as linhas mais parecidas em
+   comprimento. É o que separa "Refúgio / do Mundo" de "Refúgio do / Mundo" —
+   e o que mantém "IA Sem / Mistério" junto, sem órfã de duas letras. */
+function cortarNome(titulo) {
+  const palavras = String(titulo).trim().split(/\s+/).filter(Boolean);
+  if (palavras.length < 2) return [palavras.join(" "), ""];
+  let corte = 1;
+  let menor = Infinity;
+  for (let i = 1; i < palavras.length; i += 1) {
+    const a = palavras.slice(0, i).join(" ").length;
+    const b = palavras.slice(i).join(" ").length;
+    const d = Math.abs(a - b);
+    if (d < menor) {
+      menor = d;
+      corte = i;
+    }
+  }
+  return [palavras.slice(0, corte).join(" "), palavras.slice(corte).join(" ")];
+}
+
 export function montar(p = {}) {
   const {
-    titulo = "SEU CANAL",
-    sub = "seu slogan aqui",
     avatar = "assets/logomarca.png",
-    promessa = ["tem mais vídeo", "aqui no canal"],
-    rec = { rotulo: "próximo vídeo", nota: "em breve" },
-    inscrever = "Inscreva-se",
     t = {},
+    janela,
     at: inicio = 0.2,
     anim = "fade",
   } = p;
+
+  /* As frases do cartão também obedecem à regra de caixa (biblioteca/prosa.mjs).
+     O `montarPeca` já corrige o que vem da montagem; aqui ficam os defaults da
+     própria peça, que não passam por lá. `prosa` é idempotente. */
+  const titulo = prosa(p.titulo ?? "SEU CANAL");
+  const sub = prosa(p.sub ?? "seu slogan aqui");
+  const promessa = prosa(p.promessa ?? ["tem mais vídeo", "aqui no canal"]);
+  const inscrever = prosa(p.inscrever ?? "Inscreva-se");
+  const rec = {
+    rotulo: prosa(p.rec?.rotulo ?? "próximo vídeo"),
+    nota: prosa(p.rec?.nota ?? "em breve"),
+  };
 
   const qAvatar = num(t.avatar) ?? inicio;
   const qNome = num(t.nome) ?? qAvatar + 0.4;
@@ -41,16 +75,19 @@ export function montar(p = {}) {
   const qSlot = num(t.slot) ?? qPromessa + 0.4;
   const qPlay = num(t.play) ?? qSlot + 0.45;
   const qBotao = num(t.botao) ?? qPlay + 0.9;
+  const qJanela = num(janela);
   const qOnda1 = num(t.onda1) ?? qBotao + 1.4;
-  const qOnda2 = num(t.onda2) ?? qBotao + 5.2;
+  /* `janela` é a duração real da cena (o build informa). As ondas se espalham
+     até o corte — uma a cada ~2,2 s — para o botão respirar até o fim em vez de
+     pulsar três vezes e congelar. A última fecha 2 s antes do corte: um halo
+     pego no meio do caminho no último frame parece defeito de render. */
+  const qOnda2 = num(t.onda2) ?? +(qOnda1 + 2.2).toFixed(2);
+  const qOnda3 =
+    num(t.onda3) ?? (qJanela != null ? +(qJanela - 2).toFixed(2) : qOnda2 + 2.2);
   const qPulso1 = num(t.pulso1);
   const qPulso2 = num(t.pulso2);
 
-  // duas linhas do nome: a segunda herda o destaque de cor
-  const nome = String(titulo).trim().split(/\s+/);
-  const corte = Math.max(1, nome.length - 1);
-  const l1 = nome.slice(0, corte).join(" ");
-  const l2 = nome.slice(corte).join(" ");
+  const [l1, l2] = cortarNome(titulo);
 
   const corpo = `<div class="fm">
       <div class="fm-luz"></div>
@@ -77,8 +114,15 @@ export function montar(p = {}) {
             <span class="fm-yt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
             ${inscrever}
           </div>
-          <div class="fm-onda" ${at(qOnda1)} data-anim="onda" data-dur="0.8"></div>
-          <div class="fm-onda" ${at(qOnda2)} data-anim="onda" data-dur="0.8"></div>
+          <div class="fm-onda" ${at(qOnda1)} data-anim="ondaCampo"
+            data-cor="0,212,255" data-spread="26" data-alfa="0.55"
+            data-blur="8"></div>
+          <div class="fm-onda" ${at(qOnda2)} data-anim="ondaCampo"
+            data-cor="0,212,255" data-spread="26" data-alfa="0.55"
+            data-blur="8"></div>
+          ${qOnda3 != null ? `<div class="fm-onda" ${at(qOnda3)} data-anim="ondaCampo"
+            data-cor="0,212,255" data-spread="26" data-alfa="0.55"
+            data-blur="8"></div>` : ""}
         </div>
       </div>
 
@@ -92,12 +136,13 @@ export function montar(p = {}) {
         <div class="fm-slot" ${at(qSlot)} data-anim="riseSlow" data-dur="0.9">
           <div class="fm-slot-topo">
             <span class="fm-bola"></span><span class="fm-bola"></span><span class="fm-bola"></span>
-            <span class="fm-slot-rot">${rec.rotulo}</span>
-            <span class="fm-slot-nota">${rec.nota}</span>
+            <span class="fm-slot-rot" data-layout-ignore>${rec.rotulo}</span>
+            <span class="fm-slot-nota" data-layout-ignore>${rec.nota}</span>
           </div>
           <div class="fm-slot-corpo">
             <div class="fm-arte">
               <span class="fm-arte-grade"></span>
+              <span class="fm-arte-luz"></span>
               <span class="fm-arte-linha" style="width:46%;bottom:104px"></span>
               <span class="fm-arte-linha" style="width:28%;bottom:66px;opacity:.5"></span>
             </div>
@@ -123,61 +168,71 @@ export function montar(p = {}) {
     .fm-anel{position:absolute;inset:-18px;border-radius:50%;border:2px solid rgba(var(--cyan-rgb),.42);
       box-shadow:0 0 60px rgba(var(--cyan-rgb),.28),inset 0 0 40px rgba(var(--cyan-rgb),.14)}
     .fm-anel-giro{position:absolute;inset:-18px;border-radius:50%;
-      background:conic-gradient(from 0deg,rgba(var(--cyan-rgb),0),rgba(var(--cyan-rgb),.85),rgba(var(--lime-rgb),.5),rgba(var(--cyan-rgb),0));
+      background:conic-gradient(from 0deg,rgba(var(--cyan-rgb),0),rgba(var(--cyan-rgb),.55),rgba(var(--lime-rgb),.32),rgba(var(--cyan-rgb),0));
       -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));
       mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
     .fm-avatar{position:absolute;inset:0;border-radius:50%;overflow:hidden;
-      box-shadow:0 26px 70px rgba(var(--shadow-rgb),.55)}
+      box-shadow:0 26px 70px rgba(3,10,30,.55)}
     .fm-avatar img{width:100%;height:100%;object-fit:cover;display:block}
 
     .fm-nome{display:flex;flex-direction:column;margin-top:58px;font-family:var(--display);
       font-weight:800;font-size:92px;line-height:.96;letter-spacing:-.02em;color:var(--ink)}
     .fm-l2{color:var(--ice)}
-    .fm-sub{margin-top:24px;font-family:var(--mono);font-size:23px;letter-spacing:.035em;
-      color:var(--ink-dim);white-space:nowrap}
+    .fm-sub{margin-top:24px;font-family:var(--body);font-weight:600;font-size:30px;letter-spacing:0;
+      color:var(--ink-dim);max-width:660px;line-height:1.35}
 
     .fm-botao-caixa{position:relative;margin-top:52px;align-self:flex-start}
     .fm-botao{display:inline-flex;align-items:center;gap:20px;height:96px;padding:0 44px 0 18px;
-      border-radius:999px;background:linear-gradient(180deg,color-mix(in srgb, var(--cyan) 52%, white),var(--cyan));color:var(--on-accent);
+      border-radius:999px;background:linear-gradient(180deg,#7fe9ff,var(--cyan));color:#052042;
       font-family:var(--display);font-weight:800;font-size:34px;letter-spacing:-.01em;
-      box-shadow:0 18px 44px rgba(var(--cyan-rgb),.42),inset 0 2px 0 rgba(var(--ink-rgb),.65)}
-    .fm-yt{display:grid;place-items:center;width:62px;height:62px;border-radius:20px;background:var(--on-accent)}
-    .fm-yt svg{width:34px;height:34px;fill:color-mix(in srgb, var(--cyan) 52%, white)}
+      box-shadow:0 18px 44px rgba(0,170,220,.42),inset 0 2px 0 rgba(255,255,255,.65)}
+    .fm-yt{display:grid;place-items:center;width:62px;height:62px;border-radius:20px;background:#052042}
+    .fm-yt svg{width:34px;height:34px;fill:#7fe9ff}
+    /* o eco não escala: ele difunde. Uma sombra sem deslocamento espalha o
+       mesmo tanto em todas as direções, então o halo fica concêntrico em
+       qualquer formato de pílula (com scale, a lateral abria 60 px e o topo 9). */
     .fm-onda{position:absolute;left:0;top:0;width:100%;height:100%;border-radius:999px;
-      border:2px solid rgba(var(--cyan-rgb),.9);pointer-events:none;opacity:0}
+      pointer-events:none}
 
     .fm-dir{position:absolute;left:860px;top:145px;width:960px}
     .fm-promessa{display:flex;flex-direction:column;font-family:var(--display);font-weight:800;
       font-size:56px;line-height:1.02;letter-spacing:-.015em;color:var(--ink);margin-bottom:34px}
     .fm-promessa span:last-child{color:var(--cyan)}
 
-    .fm-slot{position:relative;width:940px;height:529px;border-radius:26px;overflow:hidden;
-      background:linear-gradient(160deg,rgba(var(--panel-2-rgb),.95),rgba(var(--bg-2-rgb),.99));
+    .fm-slot{position:relative;width:940px;height:591px;border-radius:26px;overflow:hidden;
+      background:linear-gradient(160deg,rgba(27,79,168,.95),rgba(7,20,54,.99));
       border:1.5px solid rgba(var(--line-rgb),.34);
-      box-shadow:0 30px 80px rgba(var(--shadow-rgb),.55),inset 0 1px 0 rgba(var(--ink-rgb),.12)}
+      box-shadow:0 30px 80px rgba(3,10,30,.55),inset 0 1px 0 rgba(var(--ink-rgb),.12)}
     .fm-slot-topo{display:flex;align-items:center;gap:10px;height:62px;padding:0 26px;
-      border-bottom:1px solid rgba(var(--line-rgb),.16);background:rgba(var(--shadow-rgb),.28)}
+      border-bottom:1px solid rgba(var(--line-rgb),.16);background:rgba(4,12,34,.28)}
     .fm-bola{width:11px;height:11px;border-radius:50%;background:rgba(var(--line-rgb),.45)}
-    .fm-slot-rot{margin-left:16px;font-family:var(--mono);font-size:19px;letter-spacing:.16em;
-      text-transform:uppercase;color:rgba(var(--ink-rgb),.72)}
-    .fm-slot-nota{margin-left:auto;font-family:var(--mono);font-size:18px;letter-spacing:.14em;
-      text-transform:uppercase;color:var(--cyan);opacity:.8}
-    .fm-slot-corpo{position:absolute;inset:62px 0 0 0}
+    .fm-slot-rot{margin-left:16px;font-family:var(--mono);font-size:26px;line-height:1;letter-spacing:.15em;
+      text-transform:uppercase;color:rgba(var(--ink-rgb),.85)}
+    .fm-slot-nota{margin-left:auto;font-family:var(--mono);font-size:26px;line-height:1;letter-spacing:.13em;
+      text-transform:uppercase;color:var(--cyan)}
+    /* a área de vídeo é 16:9 de verdade: 940×529, com o cabeçalho POR FORA dela.
+       Antes o cabeçalho comia 62 px por dentro e a área útil virava 2:1. */
+    .fm-slot-corpo{position:absolute;left:0;right:0;top:62px;height:529px}
     .fm-arte{position:absolute;inset:0;overflow:hidden;
       background:
         radial-gradient(105% 120% at 82% 4%,rgba(var(--cyan-rgb),.30),transparent 58%),
-        radial-gradient(90% 110% at 6% 104%,rgba(var(--blue-rgb),.55),transparent 64%),
-        linear-gradient(160deg,rgba(var(--panel-rgb),.9),rgba(var(--shadow-rgb),.98))}
+        radial-gradient(90% 110% at 6% 104%,rgba(21,101,216,.55),transparent 64%),
+        linear-gradient(160deg,rgba(11,45,110,.9),rgba(5,14,40,.98))}
     .fm-arte-grade{position:absolute;inset:0;
       background-image:linear-gradient(rgba(var(--line-rgb),.09) 1px,transparent 1px),
         linear-gradient(90deg,rgba(var(--line-rgb),.09) 1px,transparent 1px);
       background-size:56px 56px}
     .fm-arte-linha{position:absolute;left:52px;height:16px;border-radius:999px;
       background:rgba(var(--ink-rgb),.24)}
+    /* a luz parada: uma diagonal de ciano cortando o painel. Sem animação de
+       propósito — aqui ela é estrutura, não efeito. */
+    .fm-arte-luz{position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(114deg,transparent 34%,rgba(var(--cyan-rgb),.10) 46%,
+        rgba(var(--cyan-rgb),.04) 55%,transparent 68%)}
     .fm-play-p{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);
       width:132px;height:132px}
     .fm-play{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;
-      background:rgba(var(--shadow-rgb),.72);border:2px solid rgba(var(--cyan-rgb),.75);
+      background:rgba(5,32,66,.72);border:2px solid rgba(var(--cyan-rgb),.75);
       box-shadow:0 0 60px rgba(var(--cyan-rgb),.35),inset 0 0 40px rgba(var(--cyan-rgb),.18)}
     .fm-play svg{width:58px;height:58px;fill:var(--cyan);margin-left:6px}
     `,

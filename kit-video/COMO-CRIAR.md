@@ -73,6 +73,52 @@ a duração da cena — o aviso `[leitura]` calcula o tempo que falta.
 
 ---
 
+## 0d. Texto: a primeira letra sobe sozinha
+
+Toda frase de tela começa com maiúscula, e quem garante isso é o build, não a
+montagem. `montarPeca` (`biblioteca/pecas/index.mjs`) passa cada peça por
+`caixaDeProsa` (`biblioteca/prosa.mjs`) antes de desenhar:
+
+```js
+{ tipo: "texto", texto: "sem código, sem manual" }  →  "Sem código, sem manual"
+{ tipo: "tag",   texto: "o começo de tudo" }        →  "O começo de tudo"  (o CSS já põe em caixa alta)
+```
+
+O que ela não toca, e por quê:
+
+| Caso | Fica como está | Motivo |
+| --- | --- | --- |
+| já começa com maiúscula, número ou símbolo | `IA sem mistério`, `4 tokens` | não há o que corrigir |
+| fragmento de código | `montar(pagina)`, `--flag`, `arquivo.py`, `#tag` | identificador não é frase |
+| peças `codigo` e `terminal` | isentas por tipo | o conteúdo é literal |
+
+Se a minúscula for intencional (slogan, assinatura que nasce minúscula), a peça
+pede caixa livre:
+
+```js
+{ tipo: "texto", texto: "seu slogan aqui", caixa: "livre" }
+```
+
+`caixa: "livre"` (ou `semMaiuscula: true`) vale para a peça inteira, inclusive
+as peças dentro dela. A peça `fim` também corrige os próprios defaults com
+`prosa()` — eles não passam por `montarPeca`.
+
+**Ao criar uma peça nova:** não capitalize o texto à mão. Desenhe com o texto
+como veio e garanta que a chave da frase esteja na lista de `biblioteca/prosa.mjs`
+(`PROSA`, para frases soltas, e `LISTAS`, para listas de frases): `texto`,
+`titulo`, `sub`, `rotulo`, `legenda`, `nota`, `mensagem`, `promessa`,
+`frase`... Se a peça der outro nome à frase, acrescente a chave lá — é assim que
+a peça nasce certa em vez de precisar de remendo depois. O contrário também
+existe: quando uma chave de frase guarda *outra coisa* (nome de desenho, id),
+declare a exceção em `LITERAIS_POR_PECA` — é o caso de `aparelhos.itens`, que
+guarda `tv`, `fone`.
+
+Quem mede texto (`registrarCaixa` em `biblioteca/medidas.mjs`) mede o texto
+**já corrigido**, porque a correção acontece antes de `montar`. Nunca meça antes
+de passar pela regra, senão a largura registrada fica menor que a real.
+
+---
+
 ## 1. Antes de criar:
 
 1. Abra `biblioteca/CATALOGO.md` e leia o **contrato** das peças candidatas (não só o nome).

@@ -18,7 +18,7 @@ Um kit de vídeo narrado em HyperFrames. A montagem é dados; a biblioteca é c�
 montagem/*.mjs        ← o vídeo (única coisa que muda por vídeo)
 biblioteca/
   cenas/livre.mjs     ← a única cena: lista de peças com posição e tempo
-  pecas/*.mjs         ← 53 peças: tudo o que aparece na tela
+  pecas/*.mjs         ← 53 peças: tudo o que aparece na tela (inclui `fim`, o cartão final)
   transicoes/*.mjs    ← 5 transições (scan, tinta, circulo, faixa, cortina)
   overlays/*.mjs      ← 6 overlays (barra-progresso, canto, marca, carimbo, rabisco, faisca)
   som.mjs             ← nível de cada efeito medido do arquivo (não chutado)
@@ -187,3 +187,37 @@ Para ter as suas: gere cada pose com fundo transparente, salve em
 `assets/personagem/` com o nome da ação, rode `py -3 ferramentas\normalizar-poses.py`
 e descreva cada uma no fichário. Sem o PNG, a peça `figura` mostra um quadro de
 espera com o caminho do arquivo que falta — nada quebra.
+
+---
+
+## Tela final: a peça `fim`
+
+O fecho do vídeo é a peça `fim`, não uma cena desenhada à mão. Ela monta, em
+ordem de importância: o avatar do canal, o nome, o slogan, o botão de inscrever
+e o slot do próximo vídeo — um retângulo 16:9 de verdade (940×529 de vídeo), com
+o cabeçalho fora da área de vídeo, para uma thumbnail real entrar sem letterbox.
+
+```js
+{ tipo: "fim", x: 0, y: 0, at: 0.2,
+  titulo: "SEU CANAL",
+  sub: "seu slogan aqui",
+  rec: { rotulo: "próximo vídeo", nota: "em breve" },
+  inscrever: "Inscreva-se",
+  despedida: "volte quando quiser" }
+```
+
+Sem argumentos ela usa os defaults do template (`SEU CANAL`, `seu slogan aqui`).
+Troque esses dois na montagem — ou direto na peça, se o kit for de um canal só.
+
+O cartão tem **piso de 10 s** (`MIN_JANELA`): o build estica a última cena até
+lá quando a narração termina colada no corte. Para outro piso use `fim: 12` na
+montagem; para desligar, `fim: 0`. A peça recebe `janela` com a duração final e
+espaça os ecos do botão até o fim em vez de amontoá-los no começo.
+
+---
+
+## Caixa dos textos
+
+Toda peça passa por `caixaDeProsa` (`biblioteca/prosa.mjs`) antes de desenhar:
+a primeira letra da frase sobe sozinha. Não capitalize à mão e não meça texto
+antes da regra — o detalhe e as isenções estão em `COMO-CRIAR.md` § 0d.

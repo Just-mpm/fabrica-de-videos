@@ -64,6 +64,7 @@ import * as barras from "./barras.mjs";
 import * as fusao from "./fusao.mjs";
 import * as mascara from "./mascara.mjs";
 import * as fim from "./fim.mjs";
+import { caixaDeProsa } from "../prosa.mjs";
 
 export const PECAS = {
   figura,
@@ -131,6 +132,9 @@ export function cssDePecas() {
   return saida;
 }
 
+/* Toda peça passa por aqui: é o ponto único em que a caixa das frases é
+   corrigida (primeira letra maiúscula) antes de medir e desenhar. Ver
+   biblioteca/prosa.mjs para as isenções. */
 export function montarPeca(tipo, props = {}) {
   const mod = PECAS[tipo];
   if (!mod) {
@@ -138,7 +142,7 @@ export function montarPeca(tipo, props = {}) {
       `peça "${tipo}" não existe. Disponíveis: ${Object.keys(PECAS).join(", ")}`,
     );
   }
-  const saida = mod.montar(props);
+  const saida = mod.montar(caixaDeProsa(tipo, props));
   if (!saida || typeof saida.html !== "string") {
     throw new Error(`peça "${tipo}" não devolveu html`);
   }

@@ -64,11 +64,19 @@ export function envolver(p, html, { cls = "", style = "", extra = "" } = {}) {
   return `<div${cls ? ` class="${cls}"` : ""} style="position:absolute;${partes}"${extra ? ` ${extra}` : ""}>${html}</div>`;
 }
 
-/* pinta palavras dentro de um texto com uma classe do sistema visual */
+/* pinta palavras dentro de um texto com uma classe do sistema visual.
+   Aceita a palavra em minúscula e com a inicial maiúscula: a regra de caixa
+   (biblioteca/prosa.mjs) sobe a primeira letra da frase antes de pintar, então
+   "ia" no começo da frase vira "Ia" e continua sendo destacada. */
 export function pintar(texto, palavras = [], classe = "hl-cyan") {
   if (!texto) return texto;
   const lista = (Array.isArray(palavras) ? palavras : [palavras]).filter(Boolean);
-  return lista.reduce(
+  const formas = lista.flatMap((alvo) => {
+    const s = String(alvo);
+    const cap = s.charAt(0).toLocaleUpperCase("pt-BR") + s.slice(1);
+    return cap === s ? [s] : [s, cap];
+  });
+  return formas.reduce(
     (acc, alvo) => acc.split(alvo).join(`<span class="${classe}">${alvo}</span>`),
     String(texto),
   );

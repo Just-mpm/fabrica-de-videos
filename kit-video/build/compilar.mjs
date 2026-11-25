@@ -9,6 +9,7 @@ import { writeFileSync, readFileSync } from "node:fs";
 import * as livre from "../biblioteca/cenas/livre.mjs";
 
 import { PECAS, cssDePecas } from "../biblioteca/pecas/index.mjs";
+import { MIN_JANELA } from "../biblioteca/pecas/fim.mjs";
 import { FICHAS, fichaPose } from "../biblioteca/personagem.mjs";
 import { caixasDaCena } from "../biblioteca/medidas.mjs";
 
@@ -295,6 +296,45 @@ function validarCaixas(cena, medidas) {
   }
 }
 
+/* ---------- cartão final com piso de duração ----------
+   A última cena é a tela do canal (peça `fim`): avatar, slot do próximo vídeo
+   e botão de inscrever. Quando a narração termina colada no corte, essa cena
+   herdava só a cauda do áudio — 1,6 s de cartão, tempo de ninguém ler. Aqui a
+   cena é esticada até MIN_JANELA (10 s). A montagem pode pedir outro piso com
+   `fim: 12`, e desligar com `fim: 0` (vídeo já renderizado, demo).
+   A peça recebe `janela` com a duração final: é o que permite espaçar as
+   ondas do botão até o fim em vez de amontoá-las no começo. */
+function ajustarCartaoFinal(montagem) {
+  const pedido = montagem.fim === undefined ? MIN_JANELA : Number(montagem.fim);
+  const cenas = (montagem.cenas || []).map((c) => ({ ...c }));
+  if (!(pedido > 0) || !cenas.length) return { cenas, esticado: false };
+
+  const ultima = cenas[cenas.length - 1];
+  const pecas = ultima.valores?.pecas;
+  if (!Array.isArray(pecas) || !pecas.some((p) => p && p.tipo === "fim")) {
+    return { cenas, esticado: false };
+  }
+
+  let antes = 0;
+  for (const c of cenas) {
+    if (c === ultima) break;
+    antes = (c.em ?? antes) + Number(c.dur);
+  }
+  const inicio = ultima.em ?? antes;
+  const atual = Number(ultima.dur);
+  const janela = +Math.max(atual, pedido).toFixed(2);
+
+  if (janela > atual) {
+    console.log(`[fim] cartão final em ${inicio}s: ${atual}s → ${janela}s`);
+  }
+  ultima.dur = janela;
+  ultima.valores = {
+    ...ultima.valores,
+    pecas: pecas.map((p) => (p && p.tipo === "fim" ? { ...p, janela } : p)),
+  };
+  return { cenas, esticado: janela > atual };
+}
+
 export function compilar(montagem) {
   const cenas = [];
   const mapa = mapaDeFala(montagem.fala || []);
@@ -307,7 +347,9 @@ export function compilar(montagem) {
     );
   }
 
-  (montagem.cenas || []).forEach((c, i) => {
+  const { cenas: cenasMontagem, esticado: cartaoEsticado } = ajustarCartaoFinal(montagem);
+
+  cenasMontagem.forEach((c, i) => {
     const mod = CENAS[c.bloco];
     if (!mod) {
       throw new Error(
@@ -410,9 +452,13 @@ export function compilar(montagem) {
   }
 
   const fimCenas = Math.max(...cenas.map((c) => c.start + c.dur), 0);
-  const total = +(montagem.total ?? fimCenas).toFixed(2);
+  let total = +(montagem.total ?? fimCenas).toFixed(2);
   if (total < fimCenas - 0.01) {
-    throw new Error(`total (${total}s) menor que a última cena (${fimCenas.toFixed(2)}s)`);
+    if (!cartaoEsticado) {
+      throw new Error(`total (${total}s) menor que a última cena (${fimCenas.toFixed(2)}s)`);
+    }
+    console.log(`[fim] total da montagem (${total}s) acompanha o cartão: ${fimCenas.toFixed(2)}s`);
+    total = +fimCenas.toFixed(2);
   }
 
   // transição fora da linha do tempo é erro silencioso: avisa

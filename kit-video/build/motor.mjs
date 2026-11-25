@@ -153,7 +153,26 @@ export function sceneScript(id, dur) {
     pulso:     () => ({ from: { scale: 1 }, to: { scale: 1.04, duration: 0.42, repeat: 3, yoyo: true, ease: 'sine.inOut' } }),
     circleIn:  () => ({ from: { scale: 0.02, opacity: 1 }, to: { scale: 1, opacity: 1, ease: 'power3.inOut' } }),
     // onda de clique: o anel nasce pequeno, cresce e desaparece (ripple)
-    onda:      () => ({ from: { scale: 0.3, opacity: 0.85 }, to: { scale: 2.1, opacity: 0, duration: 0.6, ease: 'power2.out' } }),
+    // onda de clique: o anel nasce do tamanho do botão, abre um pouco e
+    // desaparece. semPreRender porque o from é visível — sem isso ele fica
+    // pintado no frame 0, antes da hora (pílula fantasma no meio da tela).
+    onda:      () => ({ from: { scale: 1, opacity: 0.55 }, to: { scale: 1.19, opacity: 0, duration: 1.35, ease: 'power1.out' }, semPreRender: true }),
+    // eco por difusão, não por escala: scale cresce proporcional à dimensão,
+    // então uma pílula larga abre 60 px na lateral e 9 px em cima (halo oval).
+    // A sombra espalha o mesmo tanto para todos os lados, em qualquer formato.
+    // Cor, alcance, alfa e desfoque vêm de data-cor / data-spread / data-alfa / data-blur.
+    // O desfoque é opcional: só amacia a ponta do halo largo, sem mexer na geometria.
+    ondaCampo: (el) => {
+      const cor = el.dataset.cor || '255,255,255';
+      const alfa = el.dataset.alfa || '0.5';
+      const spread = Number.isFinite(num(el.dataset.spread)) ? num(el.dataset.spread) : 24;
+      const blur = Number.isFinite(num(el.dataset.blur)) ? num(el.dataset.blur) : 0;
+      // spread zero é recortado por fora da borda: nada aparece antes da hora
+      return {
+        from: { boxShadow: '0 0 0 0px rgba(' + cor + ',' + alfa + ')' },
+        to: { boxShadow: '0 0 ' + blur + 'px ' + spread + 'px rgba(' + cor + ',0)', duration: 1.4, ease: 'power1.out' },
+      };
+    },
     fadeOut:   () => ({ from: { opacity: 1 }, to: { opacity: 0, ease: 'power1.in' } }),
     // transparenta: um véu que deixa de esconder o que está por baixo, sem sumir.
     // A opacidade final vem em data-to; o objeto continua ali, como vidro.
@@ -332,6 +351,10 @@ export function sceneScript(id, dur) {
 
     // garante o estado inicial escondido mesmo se a timeline for buscada direto
     if (spec.from.opacity === 0) tl.set(target, { opacity: 0 }, 0);
+
+    // efeito decorativo que só existe a partir do seu segundo: o from não
+    // pode ser pintado na criação da timeline (a pílula fantasma da onda)
+    if (spec.semPreRender) to.immediateRender = false;
 
     tl.fromTo(target, spec.from, to, at);
   };

@@ -87,7 +87,7 @@ O kit tem um bloco só. Tudo o que aparece na tela é peça.
 | `barras` | colunas verticais com valor no topo e escala declarada: comparar dois números sem mentir no tamanho | itens [{rotulo, valor, cor, at}], max, titulo, legenda, fator, tFator, w, h, x, y, at, anim | cortar o eixo para inflar a diferença; mais de 4 colunas |
 | `fusao` | folha de papel e painel de app lado a lado; o divisor desbota, a folha ganha botão e o painel ganha texto | esquerda {rotulo, titulo}, direita {rotulo, titulo}, t {divisor, apaga, botao, margem}, w, h, x, y, at, anim | mais de dois painéis; animar o que está dentro da folha antes do divisor desbotar |
 | `mascara` | cartão de resumo que se torna translúcido e revela o motor aceso por baixo | t {motor, sobe}, w, h, x, y, at, anim | trocar o cartão por outro; a graça é o mesmo objeto deixando de esconder |
-| `fim` | cartão final: avatar do canal, nome, slot 16:9 do próximo vídeo e botão de inscrever | titulo, sub, avatar, promessa, rec {rotulo, nota}, inscrever, t {avatar, nome, sub, promessa, slot, play, botao, onda1, onda2}, x, y, at, anim | mais de um slot de recomendação; texto corrido; concorrer com a última frase da narração |
+| `fim` | cartão final: avatar do canal, nome, slot 16:9 do próximo vídeo e botão de inscrever | titulo, sub, avatar, promessa, rec {rotulo, nota}, inscrever, janela, t {avatar, nome, sub, promessa, slot, play, botao, onda1, onda2, onda3, pulso1, pulso2}, x, y, at, anim | mais de um slot de recomendação; texto corrido; concorrer com a última frase da narração |
 
 ## Poses do personagem (assets/personagem)
 
