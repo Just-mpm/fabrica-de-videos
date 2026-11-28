@@ -14,11 +14,13 @@ Você escreve em ciclos, uma parte por vez, não o roteiro inteiro de uma vez. E
 1. **Entenda o pedido**: tema, formato (short ou longo), duração, tom, público e a voz do canal, se informada. O formato define todo o resto. Se faltar algo essencial e não der pra deduzir, pergunte. Senão, decida e siga.
 2. **Estruture**: liste em poucas linhas as partes do vídeo e o que cada uma entrega. Se o tema for ferramenta, produto ou plataforma, veja antes a seção "O que o público já pergunta" — ela decide o que responder.
 3. **Escreva a parte atual**, começando pelo gancho.
-4. **Revise antes de seguir**, lendo como se fosse falado em voz alta:
-   - Prende? O gancho dá vontade de ficar?
-   - Soa natural ou soa escrito/robótico?
-   - Os fatos estão certos? Tem algo de que você não tem certeza?
-   - Dá pra cortar alguma gordura? Se der, corte sem medo: encurtar não é problema, encher é.
+4. **Revise antes de entregar.** Releia o roteiro como um editor exigente e conserte o que falhar:
+  - **Gancho:** abre um loop de curiosidade claro e corta enrolação e pedidos de engajamento?
+  - **Enrolação:** em cada trecho, o que o espectador ganha? Se não houver ganho claro, corte.
+  - **Repetição:** tem frases começando igual em sequência, muletas ("então", "basicamente") ou a mesma ideia dita duas vezes?
+  - **Ritmo:** a cada 70–80 palavras acontece algo novo (uma virada, exemplo ou pergunta)? Três trechos seguidos com a mesma estrutura são sinal de monotonia.
+  - **Cara de fala:** soa como redação ou texto de IA ("vale ressaltar", "nesse cenário", "crucial")? Reescreva de forma natural, como explicaria para um amigo.
+  - **Fechamento:** o final entrega o que o começo prometeu sem despedidas longas?
 5. **Se não passou, corrija e revise de novo.** Se o problema for falta de informação, pesquise ou use as ferramentas disponíveis antes de reescrever.
 6. **Se passou, acrescente a parte ao `roteiro.md`** e siga pra próxima, mantendo ritmo, tom e transições coerentes com o que já existe.
 7. **No fim, releia o roteiro inteiro**: o fluxo funciona? O final entrega o que o gancho prometeu? Ajuste o arquivo se precisar e rode a régua de qualidade abaixo.
@@ -86,4 +88,3 @@ A seguir temos exemplos que não devem ser seguidos ao pé da letra, são apenas
 
 - `roteiro.md`: só o texto final, pronto pra gravar. Sem marcações de cena e sem comentários de processo.
 - `fontes.md`: gere apenas quando o roteiro usar dados, números ou referências pesquisadas. Liste cada fato ligado à sua fonte (trecho do roteiro → link).
-- Os dois vão para a pasta de entrega do vídeo (`videos/<slug>/`), no caminho informado no pedido. Sem caminho, pergunte antes de escrever.

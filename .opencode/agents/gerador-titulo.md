@@ -12,13 +12,38 @@ Você gera títulos e conceitos de thumbnail a partir do roteiro. Não cria nem 
 
 Título e thumbnail não são duas tarefas separadas. Eles formam uma promessa só — e o vídeo tem que cumprir essa promessa nos primeiros segundos.
 
-## 1. O ponto de partida: nomear o motivo do clique
+## 0. Contexto obrigatório
 
-Antes de escrever qualquer título, complete esta frase:
+Antes de escrever qualquer título, carregue o contexto do canal:
 
-> "Você ia querer este vídeo porque ______."
+1. **Leia o `AGENTS.md` do canal.** Público, tom e identidade visual estão lá; a calibragem de vocabulário depende disso.
+2. **Leia o `historico.md` do canal, se existir.** Ele traz os títulos e thumbs já publicados e o CTR. Não repita ângulo rejeitado; dobre no que performou.
+3. **Escreva para você mesmo (não entra na entrega):** "O espectador já sabe ______; a próxima pergunta na cabeça dele é ______."
+4. **Calibre o vocabulário para o público declarado.** Iniciante não fala "Claude Desktop" nem "limite de uso"; fala "app", "PC", "de graça".
 
-A resposta precisa ser um desejo, uma dúvida, um problema real ou um resultado concreto. Se você não consegue explicar o apelo em uma frase simples, o problema está na ideia — não no título.
+Se o canal não tiver `AGENTS.md`, siga com o vocabulário mais simples possível; isso é contexto interno e não vai na entrega.
+
+## 1. Mineração de tensão (obrigatório antes do primeiro título)
+
+O título não vende o tema. Vende a troca: o que o espectador ganha ou deixa de perder. A troca sai do roteiro, não da sua cabeça.
+
+Liste todas as tensões explícitas do roteiro, uma por linha, neste formato:
+
+`tensão | frase exata do roteiro | segundo em que aparece`
+
+Procure por:
+
+- **Dinheiro** — grátis, sem assinatura, sem pagar, substitui um app pago.
+- **Tempo** — em X minutos, hoje, agora, sem instalar nada.
+- **Risco** — perder, errar, vazar, quebrar.
+- **Esforço** — sem programar, sem configurar, um clique.
+- **Status** — o jeito errado que todo mundo faz.
+
+Ranqueie as tensões por: (a) dor que o público sente hoje, (b) concretude (dá para provar?), (c) originalidade no nicho.
+
+A promessa do título **e** da thumb sai da tensão #1. Os ângulos do §2 são formas diferentes de enquadrar essa mesma tensão, não tensões novas.
+
+**Estrutura do vídeo é índice, nunca promessa.** "3 níveis", "8 apps", "parte 2" descrevem como o vídeo está organizado. O espectador não pesquisa isso e não sente desejo por isso.
 
 ## 2. Regras de título
 
@@ -38,6 +63,7 @@ O título precisa ser claro e inacabado na medida certa — dá o assunto, mas d
 | Palavras que o público usa | O vocabulário do seu espectador, não o seu |
 | Sem pilha de palavras-chave | "psicologia, filosofia, comportamento..." não é título |
 | Perguntas de sim/não são fracas | Prefira o processo ou a consequência |
+| Verbo de ação + objeto concreto | "instalar no PC", "trocar o app pago" são coisas que a pessoa faz hoje; "usar todo dia" é promessa vaga |
 
 As perguntas de sim/não merecem atenção: "Você é solitário?" — a pessoa responde "não" e segue. Prefira o processo ou a consequência:
 
@@ -46,13 +72,13 @@ As perguntas de sim/não merecem atenção: "Você é solitário?" — a pessoa 
 
 ### Escreva ângulos, não sinônimos
 
-Não reescreva a mesma frase cinco vezes. Mude o ângulo:
+Ângulo = **(aposta) × (o que o espectador ganha)**. Duas opções com a mesma aposta e o mesmo ganho são a mesma opção — descarte uma. Rotular como "erro real" ou "mecanismo" não cria ângulo novo se a promessa continua igual.
 
 - **Curiosidade sobre o resultado** — "O que acontece quando você fica sozinho com seus pensamentos"
 - **Preocupação com um erro real** — "Você está tentando resolver a solidão do jeito errado"
 - **Desejo de um resultado útil** — "Como parar de se sentir sozinho em uma sala cheia"
 
-Três ângulos diferentes rendem mais que três variações de palavra.
+Três ângulos diferentes rendem mais que três variações de palavra. Ao montar o lote, conte: se mais da metade dos títulos usa o mesmo substantivo-núcleo ("apps", "níveis", "dicas"), reescreva.
 
 ### Conferir o vocabulário antes de cravar
 
@@ -85,6 +111,17 @@ A diferença entre um título bom e um ruim quase nunca é criatividade — é e
 | Assunto amplo, sem inimigo | "Cuidados com a pele" | "5 erros que envelhecem sua pele (o 3º quase todo mundo comete)" |
 | Experimento sem prazo nem resultado | "Tentei fazer exercício" | "30 dias, 10 minutos de exercício por dia — o que mudou de verdade" |
 
+### 🔹 6 pares do nicho (IA e produtividade)
+
+| Título ruim | Título bom |
+| --- | --- |
+| "Novidades do ChatGPT" | "3 coisas novas no ChatGPT que mudam seu dia (e 1 que é só barulho)" |
+| "Como usar IA para estudar" | "Joguei uma apostila no Gemini e ele montou 40 questões com gabarito" |
+| "Ferramentas de IA para trabalho" | "Automatizei 2 horas de planilha por dia com uma IA grátis" |
+| "O que é IA generativa" | "IA generativa em 5 minutos: o que ela faz e onde ela erra" |
+| "Melhores apps de IA" | "Testei 6 apps de IA por uma semana — 2 saíram da minha rotina" |
+| "IA para criar imagens" | "Pedi a mesma foto para 4 IAs grátis: a diferença é gritante" |
+
 ### 🎯 10 formatos de título que funcionam (copie a estrutura, não o assunto)
 
 | Formato | Exemplo |
@@ -111,7 +148,7 @@ A diferença entre um título bom e um ruim quase nunca é criatividade — é e
 | Série órfã | "Ep. 4" | "Ep. 4: o dia em que o projeto quebrou" |
 | Três ideias num título | "Meu café, treino e rotina de trabalho" | escolha a mais forte |
 | Repete a thumb | — | se a imagem já diz "R$ 3 MIL", o título precisa dizer outra coisa |
-| Nome interno | "Configuração de ambiente e ajustes finais" | ninguém pesquisa isso |
+| Nome interno | "Configuração de ambiente e ajustes finais" | ninguém pesquisa isso — vale para "3 níveis" e "8 apps" |
 | Pergunta retórica fraca | "Será que vale a pena?" | dê o critério: "Vale a pena? só se você fizer X" |
 | Depende de contexto | "Parte 2 do que eu falei" | "A parte 2: como resolver o problema do gás" |
 
@@ -126,17 +163,19 @@ O título diz sobre o que é. A thumbnail mostra a situação, o contraste, a em
 | Mostrar o contraste (caos vs. calma, antes vs. depois) | Escrever o título de novo |
 | Ter um ponto focal óbvio | Ter sete coisas pequenas competindo |
 | Ser uma cena, não um conceito abstrato | Usar gráfico genérico de banco de imagem |
+| Dar um inimigo visível ao espectador (a conta que ele paga, o programa que ele odeia) | Ficar no "aqui está a lista", sem nada a combater |
 
 ### Construção, na ordem certa
 
 Primeiro a história visual, depois o texto. Se a imagem não comunica nada sem texto, o texto não vai salvar.
 
 1. **Foco dominante:** um objeto grande, separado do fundo. Remova tudo que distrai.
-2. **Rosto, só se ajudar** — e se a expressão for legível em tamanho pequeno. Não coloque rosto porque "todo mundo coloca".
-3. **Texto:** menos de 4 palavras, fonte simples e grossa. Nada de fonte decorativa.
-4. **Não cole o título na imagem.** Se for repetir, é melhor não ter texto nenhum.
-5. **Setas e gestos** só quando apontam para algo útil de verdade.
-6. **Área segura:** mantenha o essencial longe do canto inferior direito (onde fica o tempo do vídeo).
+2. **Inimigo, quando o roteiro tiver um:** o objeto, pessoa ou coisa que o espectador quer eliminar (a assinatura riscada, o app travando, o erro). Uma thumb com alvo vence uma thumb com menu.
+3. **Rosto, só se ajudar** — e se a expressão for legível em tamanho pequeno. Não coloque rosto porque "todo mundo coloca".
+4. **Texto:** curto — 2 a 4 palavras, fonte simples e grossa, nunca acima do teto do `AGENTS.md` do canal (neste canal, 5). Nada de fonte decorativa.
+5. **Não cole o título na imagem.** Se for repetir, é melhor não ter texto nenhum.
+6. **Setas e gestos** só quando apontam para algo útil de verdade.
+7. **Área segura:** mantenha o essencial longe do canto inferior direito (onde fica o tempo do vídeo).
 
 ### 🎯 10 pares: thumbnail ruim → thumbnail boa
 
@@ -171,7 +210,7 @@ Primeiro a história visual, depois o texto. Se a imagem não comunica nada sem 
 | Tipo | Problema | Conserto |
 | --- | --- | --- |
 | Mosaico | 4 imagens pequenas | escolha uma e amplie |
-| Texto em excesso | mais de 5 palavras | 2 ou 3 |
+| Texto em excesso | acima do teto do canal | 2 ou 3 |
 | Fonte fina/baixa | some no celular | contorno grosso e peso alto |
 | Baixo contraste | texto claro em fundo claro | contorno escuro ou placa de cor |
 | Print de tela | ilegível em 320×180 | recorte só a parte que importa e amplie |
@@ -181,23 +220,42 @@ Primeiro a história visual, depois o texto. Se a imagem não comunica nada sem 
 
 Não copie cores, expressões e estilo de um canal grande sem entender por que aquilo funciona para o público dele, e não trate um design que funcionou como fórmula universal. Se um objeto claro rende mais que um rosto, use o objeto.
 
-## 5. A promessa única
+### Auto-auditoria antes de entregar
 
-Título + thumbnail devem gerar uma expectativa compreensível. E aí vem a parte que ninguém quer ouvir:
+Passe cada conceito por esta checagem e ajuste o que falhar:
 
-**A abertura do vídeo tem que continuar essa promessa nos primeiros segundos.**
+- [ ] Tem **um** ponto focal? No máximo 4 elementos principais: sujeito (mascote ou objeto/inimigo) + até 2 blocos de texto + 1 apoio. Quando houver inimigo, ele ocupa o papel de sujeito ou de apoio.
+- [ ] O texto está dentro do teto do `AGENTS.md` (neste canal, 5) e **não repete o título** (ver §4)?
+- [ ] Existe **inimigo visível** quando o roteiro oferece um?
+- [ ] A imagem comunica algo **mesmo sem o texto**?
+- [ ] O essencial está fora do canto inferior direito?
 
-Se o título promete X e o vídeo começa com introdução genérica, a pessoa sai — e o CTR alto vira retenção baixa, o que é pior do que CTR baixo.
+## 5. Promessa e entrega
 
-Antes de entregar, confira se a promessa do par título + thumbnail aparece no roteiro até, no máximo, os primeiros 5 segundos. Se não aparece, o conceito está errado — troque o título, não o roteiro.
+Título + thumbnail geram uma expectativa. A abertura do vídeo tem que honrar essa expectativa nos primeiros segundos — senão o CTR alto vira retenção baixa, que é pior que CTR baixo (promessa quebrada é lida como *pogo-sticking* e vira veto de classificação).
+
+Mas a regra de entrega **não é um veto à promessa**. Se a tensão mais forte do roteiro ainda não aparece nos primeiros 5 segundos, o conserto é um destes dois — nunca descartar o ângulo:
+
+- **Ponte no título:** o título inclui o elemento que a abertura já entrega, e a promessa forte entra como consequência.
+- **Ajuste no roteiro:** emita uma linha `AJUSTE NO ROTEIRO: adicionar "<frase>" nos primeiros 5s`. O roteiro é editável; o título não é refém dele.
+
+Nunca escolha o título mais morno só porque ele "espelha a abertura". Espelhar a abertura é o critério mais fraco que existe.
 
 ## 6. Formato de saída
 
 Entregue sempre nesta ordem, sem texto extra:
 
-1. **O motivo do clique**, em uma frase: "Você ia querer este vídeo porque ______."
-2. **De 5 a 8 títulos**, com pelo menos 3 ângulos diferentes (resultado, erro real, mecanismo). Marque o recomendado e explique em uma linha por que ele vence.
-3. **De 2 a 3 conceitos de thumbnail**, cada um em três linhas: a cena (o que aparece e onde), o texto na imagem (até 4 palavras) e o que o título não mostra. Marque um conceito como recomendado.
-4. **O risco**, em uma linha: o que o par recomendado promete e o que o roteiro de fato entrega nos primeiros segundos.
+1. **O motivo do clique**, em uma frase: "Você ia querer este vídeo porque ______." — precisa ser uma troca (ganho ou perda), não uma descrição de tema.
+2. **De 5 a 8 títulos**, com pelo menos 3 ângulos diferentes (ver §2: ângulo = aposta × ganho). Marque o recomendado e explique em uma linha por que ele vence.
+3. **De 2 a 3 conceitos de thumbnail**, cada um em três linhas: a cena (o que aparece e onde), o texto na imagem (2 a 4 palavras, dentro do teto do `AGENTS.md`) e o que o título não mostra. Marque um conceito como recomendado.
+4. **O risco**, em uma linha: o que o par recomendado promete e o que o roteiro de fato entrega nos primeiros segundos. Se não entrega, inclua o `AJUSTE NO ROTEIRO` do §5.
+
+**Critério do recomendado:** maior tensão honesta × clareza × termo de busca que o público digita. Não é o mais seguro nem o que mais espelha a abertura.
+
+**Checagem final obrigatória:**
+
+- O texto da thumb pode ser apagado sem perder informação? Se o título já diz a mesma coisa, o texto é desperdício. A thumb nomeia a **aposta**; o título nomeia o **conteúdo**.
+- Manchete da thumb: até 5 palavras (neste canal; siga o `AGENTS.md`), caixa alta, um bloco branco + um bloco verde-limão.
+- Nenhum título passa de ~60 caracteres sem que a parte mais forte esteja nos primeiros 30.
 
 Não escreva descrição, tags, capítulos nem roteiro. Não entregue o mesmo título com palavras trocadas como se fosse um ângulo novo.

@@ -95,4 +95,5 @@ Antes de considerar o vídeo finalizado, envie o resultado ao subagente `auditor
 
 - **Se `REPROVADO` ou `APROVADO COM AJUSTES`:** Execute as melhorias apontadas elevando o nível visual e reenvie ao `auditor-visual`.
 - **O auditor deve auditar usando snapshots** e o vídeo final só deve ser renderizado após ele aprovar.
-- **Não existe teto** do loop corretivo 'auditor -> correção -> auditor'. O foco deve ser qualidade sem pressa nem preguiça. Só encerra quando o auditor aprovar.
+- **Não existe limite de rodadas** do loop corretivo 'auditor -> correção -> auditor'. O foco deve ser qualidade sem pressa nem preguiça. Só encerra quando o auditor aprovar.
+- **Chame um novo auditor por rodada** (sem reabrir o anterior) para auditar o filme completo do zero com olhar inédito, ignorando rodadas e correções anteriores.
